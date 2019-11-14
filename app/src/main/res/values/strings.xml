@@ -19,4 +19,6 @@
     <string name="my_email">yudistriawan@gmail.com</string>
     <string name="my_favorite">My Favorite</string>
     <string name="favorites">Favorites</string>
+    <string name="airing_today">Airing Today</string>
+    <string name="on_the_air">On The Air</string>
 </resources>

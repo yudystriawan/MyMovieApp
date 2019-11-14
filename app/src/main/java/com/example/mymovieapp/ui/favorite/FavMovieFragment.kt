@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mymovieapp.R
 import com.example.mymovieapp.adapter.FavMovieAdapter
@@ -23,6 +23,10 @@ import kotlinx.coroutines.launch
  */
 class FavMovieFragment : Fragment() {
 
+    private lateinit var adapter: FavMovieAdapter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var favMovieHelper: FavMovieHelper
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,24 +34,36 @@ class FavMovieFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_fav_movie, container, false)
 
-       return view
+        recyclerView = view.findViewById(R.id.rv_fav_movie)
+        recyclerView.layoutManager = GridLayoutManager(activity, 3)
+
+        adapter = FavMovieAdapter()
+        recyclerView.adapter = adapter
+
+        favMovieHelper = FavMovieHelper.getInstance(activity!!.applicationContext)
+
+        loadMovieAsync()
+
+        return view
     }
 
     private fun loadMovieAsync() {
-//        GlobalScope.launch(Dispatchers.Main){
-//            val deferredMovies = async(Dispatchers.IO){
-//                val cursor = favMovieHelper.queryAll()
-//                MappingHelper.mapCursorToArrayList(cursor)
-//            }
-//
-//            val movies = deferredMovies.await()
-//            if (movies.size>0){
-//                adapter.listFavorites = movies
-//            }else{
-//                adapter.listFavorites = ArrayList()
-//                Toast.makeText(context, "tidak ada data", Toast.LENGTH_SHORT).show()
-//            }
-//        }
+        GlobalScope.launch(Dispatchers.Main) {
+            val deferredMovies = async(Dispatchers.IO) {
+                val cursor = favMovieHelper.queryAll()
+                MappingHelper.getAllMovies(cursor)
+            }
+
+            val movies = deferredMovies.await()
+            if (movies.size > 0) {
+                adapter.listFavorites = movies
+//                adapter.setData(movies)
+            } else {
+                adapter.listFavorites = ArrayList()
+//                adapter.setData(movies)
+                Toast.makeText(context, "tidak ada data", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 }

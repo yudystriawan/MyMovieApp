@@ -1,22 +1,26 @@
 package com.example.mymovieapp.adapter
 
-import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.mymovieapp.CustomOnItemClickListener
 import com.example.mymovieapp.DetailFilmActivity
 import com.example.mymovieapp.R
+import com.example.mymovieapp.database.FavMovieHelper
+import com.example.mymovieapp.helper.MappingHelper
 import com.example.mymovieapp.model.Movie
+import com.example.mymovieapp.model.Tv
 import kotlinx.android.synthetic.main.items.view.*
 
 class MovieAdapter :
     RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     private val movies = ArrayList<Movie>()
+    private lateinit var favMovieHelper: FavMovieHelper
+
+
 
     fun setData(items: ArrayList<Movie>) {
         movies.clear()
@@ -38,6 +42,7 @@ class MovieAdapter :
     }
 
     inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         fun bind(movie: Movie) {
 
             with(itemView) {
@@ -48,10 +53,19 @@ class MovieAdapter :
                     .load(posterPath)
                     .into(img_poster)
 
+                favMovieHelper = FavMovieHelper.getInstance(context.applicationContext)
+
                 itemView.img_poster.setOnClickListener {
+
+                    val cursor = favMovieHelper.queryByMovieId(movie.id.toString())
+                    val favoriteMovie = MappingHelper.mapCursorToObject(cursor)
+
                     val intent = Intent(context, DetailFilmActivity::class.java)
                     intent.putExtra(DetailFilmActivity.EXTRA_MOVIE_ID, movie.id)
+                    intent.putExtra(DetailFilmActivity.EXTRA_FAVORITE_MOVIE, favoriteMovie)
+
                     context.startActivity(intent)
+
                 }
 
             }

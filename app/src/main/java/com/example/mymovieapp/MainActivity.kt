@@ -6,11 +6,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.example.mymovieapp.database.FavMovieHelper
+import com.example.mymovieapp.database.FavTvHelper
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var favMovieHelper: FavMovieHelper
+    private lateinit var favTvHelper: FavTvHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +23,9 @@ class MainActivity : AppCompatActivity() {
         tabs.setupWithViewPager(view_pager)
 
         favMovieHelper = FavMovieHelper.getInstance(applicationContext)
+        favTvHelper = FavTvHelper.getInstance(applicationContext)
         favMovieHelper.open()
+        favTvHelper.open()
 
     }
 
@@ -47,5 +51,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         favMovieHelper.close()
+        favTvHelper.close()
     }
 }

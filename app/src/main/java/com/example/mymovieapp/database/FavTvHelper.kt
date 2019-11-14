@@ -7,27 +7,27 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns._ID
-import com.example.mymovieapp.database.DatabaseContract.FavMovieColumns.Companion.MOVIE_ID
-import com.example.mymovieapp.database.DatabaseContract.FavMovieColumns.Companion.TABLE_NAME
+import com.example.mymovieapp.database.DatabaseContract.FavTvColumns.Companion.TABLE_NAME
+import com.example.mymovieapp.database.DatabaseContract.FavTvColumns.Companion.TV_ID
 
-class FavMovieHelper(context: Context) {
+class FavTvHelper(context: Context) {
 
     companion object {
         private const val DATABASE_TABLE = TABLE_NAME
         private lateinit var databaseHelper: DatabaseHelper
-        private var INSTANCE: FavMovieHelper? = null
+        private var INSTANCE: FavTvHelper? = null
 
         private lateinit var database: SQLiteDatabase
 
-        fun getInstance(context: Context): FavMovieHelper {
+        fun getInstance(context: Context): FavTvHelper {
             if (INSTANCE == null) {
                 synchronized(SQLiteOpenHelper::class.java) {
                     if (INSTANCE == null) {
-                        INSTANCE = FavMovieHelper(context)
+                        INSTANCE = FavTvHelper(context)
                     }
                 }
             }
-            return INSTANCE as FavMovieHelper
+            return INSTANCE as FavTvHelper
         }
     }
 
@@ -62,7 +62,7 @@ class FavMovieHelper(context: Context) {
         return database.query(
             DATABASE_TABLE,
             null,
-            "$MOVIE_ID=?",
+            "$TV_ID=?",
             arrayOf(movieId),
             null,
             null,

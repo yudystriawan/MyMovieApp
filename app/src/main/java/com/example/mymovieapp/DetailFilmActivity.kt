@@ -1,50 +1,97 @@
 package com.example.mymovieapp
 
 import android.content.ContentValues
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.mymovieapp.adapter.FavMovieAdapter
 import com.example.mymovieapp.database.DatabaseContract
 import com.example.mymovieapp.database.FavMovieHelper
+import com.example.mymovieapp.database.FavTvHelper
 import com.example.mymovieapp.model.FavoriteMovie
+import com.example.mymovieapp.model.FavoriteTv
 import com.example.mymovieapp.model.Movie
-import com.example.mymovieapp.ui.favorite.FavMovieFragment
+import com.example.mymovieapp.model.Tv
 import com.example.mymovieapp.ui.movie.MovieViewModel
+import com.example.mymovieapp.ui.tv.TvViewModel
 import kotlinx.android.synthetic.main.activity_detail_film.*
 
 class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
 
     companion object {
-        const val EXTRA_MOVIE_ID = "extra_movie_id"
+        const val EXTRA_MOVIE_ID = "extra_tv_id"
+        const val EXTRA_TV_ID = "extra_movie_id"
+        const val EXTRA_FAVORITE_MOVIE = "extra_favorite_movie"
+        const val EXTRA_FAVORITE_TV = "extra_favorite_tv"
     }
 
     private lateinit var favMovieHelper: FavMovieHelper
+    private lateinit var favTvHelper: FavTvHelper
+
     private lateinit var movieViewModel: MovieViewModel
+    private lateinit var tvViewModel: TvViewModel
+
+    private lateinit var movie: Movie
+    private lateinit var tv: Tv
 
     private var movieId: Int = 0
+    private var tvId: Int = 0
+    private var favoriteMovie: FavoriteMovie? = null
+    private var favoriteTv: FavoriteTv? = null
+
+    private var isMovie = true
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_film)
 
         favMovieHelper = FavMovieHelper.getInstance(applicationContext)
+        favTvHelper = FavTvHelper.getInstance(applicationContext)
 
         movieViewModel = ViewModelProvider(
             this,
             ViewModelProvider.NewInstanceFactory()
         ).get(MovieViewModel::class.java)
 
+        tvViewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.NewInstanceFactory()
+        ).get(TvViewModel::class.java)
+
         movieId = intent.getIntExtra(EXTRA_MOVIE_ID, 0)
+        tvId = intent.getIntExtra(EXTRA_TV_ID, 0)
+        favoriteMovie = intent.getParcelableExtra(EXTRA_FAVORITE_MOVIE)
+        favoriteTv = intent.getParcelableExtra(EXTRA_FAVORITE_TV)
 
-        setDetailsMovie(movieId)
-        getDetailsMovie()
+        if (movieId != 0) {
 
+            if (movieId == favoriteMovie?.movieId) {
+                btn_add_favorite.isEnabled = false
+                btn_add_favorite.isClickable = false
+                favoriteMovie?.let { setDetailsMovie(it.movieId) }
+            } else {
+                setDetailsMovie(movieId)
+            }
+
+            getDetailsMovie()
+
+        } else {
+            if (tvId == favoriteTv?.tvId) {
+                btn_add_favorite.isEnabled = false
+                btn_add_favorite.isClickable = false
+                favoriteTv?.let { setDetailsTv(it.tvId) }
+            } else {
+                setDetailsTv(tvId)
+            }
+
+            getDetailsTv()
+
+            isMovie = false
+        }
 
         btn_add_favorite.setOnClickListener(this)
 
@@ -53,6 +100,57 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         if (v?.id == R.id.btn_add_favorite) {
 
+            val itemId: Int
+            val itemPoster: String?
+            val values = ContentValues()
+
+            val ITEM_ID: String
+            val POSTER_PATH: String
+
+            if (isMovie) {
+                itemId = movie.id
+                itemPoster = movie.posterPath
+
+                ITEM_ID = DatabaseContract.FavMovieColumns.MOVIE_ID
+                POSTER_PATH = DatabaseContract.FavMovieColumns.POSTER_PATH
+
+            } else {
+                itemId = tv.id
+                itemPoster = tv.posterPath
+
+                ITEM_ID = DatabaseContract.FavTvColumns.TV_ID
+                POSTER_PATH = DatabaseContract.FavTvColumns.POSTER_PATH
+            }
+
+            values.put(ITEM_ID, itemId)
+            values.put(POSTER_PATH, itemPoster)
+
+            if (isMovie) {
+                favMovieHelper.insert(values)
+            } else {
+                favTvHelper.insert(values)
+            }
+
+            Toast.makeText(
+                this@DetailFilmActivity,
+                "difavoritkan",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            btn_add_favorite.isEnabled = false
+
+
+//            if (result > 0) {
+//                favoriteMovie?.id = result.toInt()
+//                setResult(RESULT_ADD, intent)
+//                finish()
+//            } else {
+//                Toast.makeText(
+//                    this@DetailFilmActivity,
+//                    "Gagal menambahakan data favorit",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
         }
     }
 
@@ -61,10 +159,26 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
         showLoading(true)
     }
 
+    private fun setDetailsTv(tvId: Int) {
+        tvViewModel.setDetailsTv(tvId)
+        showLoading(true)
+    }
+
     private fun getDetailsMovie() {
         movieViewModel.getDetailsMovie().observe(this, Observer { movie ->
             if (movie != null) {
                 loadMovieData(movie)
+                this.movie = movie
+                showLoading(false)
+            }
+        })
+    }
+
+    private fun getDetailsTv() {
+        tvViewModel.getDetailsTv().observe(this, Observer { tv ->
+            if (tv != null) {
+                loadTvData(tv)
+                this.tv = tv
                 showLoading(false)
             }
         })
@@ -99,6 +213,38 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
         val vote = "${movie.voteAverage}/10"
         tv_vote_average.text = vote
         tv_vote_count.text = movie.voteCount
+
+    }
+
+    private fun loadTvData(tv: Tv) {
+        val title = tv.name
+        val oriTitle = tv.originalName
+
+        if (title.equals(oriTitle)) {
+            tv_title.text = title
+        } else {
+            val editTitle = "$oriTitle ($title)"
+            tv_title.text = editTitle
+        }
+
+        val posterPath = "https://image.tmdb.org/t/p/w154" + tv.posterPath
+        val backdropPath = "https://image.tmdb.org/t/p/w500" + tv.backdropPath
+
+        Glide
+            .with(this)
+            .load(posterPath)
+            .into(img_poster)
+
+        Glide
+            .with(this)
+            .load(backdropPath)
+            .into(img_backdrop)
+
+        tv_overview.text = tv.overview
+
+        val vote = "${tv.voteAverage}/10"
+        tv_vote_average.text = vote
+        tv_vote_count.text = tv.voteCount
 
     }
 

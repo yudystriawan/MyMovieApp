@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mymovieapp.APIInterface
 import com.example.mymovieapp.model.Movie
-import com.example.mymovieapp.response.APIResponse
+import com.example.mymovieapp.response.MovieResponse
 import com.example.mymovieapp.services.ServiceGenerator
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,13 +26,13 @@ class MovieViewModel : ViewModel() {
 
     fun setNowPlayingMovies() {
         val api = apiInterface.getNowPlayingMovie(API_KEY, "en-US")
-        api.enqueue(object : Callback<APIResponse> {
-            override fun onResponse(call: Call<APIResponse>, response: Response<APIResponse>) {
+        api.enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 val result = response.body()?.results
                 nowPlayingMovies.postValue(result)
             }
 
-            override fun onFailure(call: Call<APIResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 Log.e("onFailure", t.message.toString())
             }
         })
@@ -40,13 +40,13 @@ class MovieViewModel : ViewModel() {
 
     fun setPopularMovies() {
         val api = apiInterface.getPopularMovie(API_KEY, "en-US")
-        api.enqueue(object : Callback<APIResponse> {
-            override fun onResponse(call: Call<APIResponse>, response: Response<APIResponse>) {
+        api.enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 val result = response.body()?.results
                 popularMovies.postValue(result)
             }
 
-            override fun onFailure(call: Call<APIResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 Log.e("onFailure", t.message.toString())
             }
         })
@@ -54,13 +54,13 @@ class MovieViewModel : ViewModel() {
 
     fun setTopRatedMovies() {
         val api = apiInterface.getTopRatedMovie(API_KEY, "en-US")
-        api.enqueue(object : Callback<APIResponse> {
-            override fun onResponse(call: Call<APIResponse>, response: Response<APIResponse>) {
+        api.enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 val result = response.body()?.results
                 topRatedMovies.postValue(result)
             }
 
-            override fun onFailure(call: Call<APIResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 Log.e("onFailure", t.message.toString())
             }
         })
@@ -68,13 +68,13 @@ class MovieViewModel : ViewModel() {
 
     fun setUpcomingMovies() {
         val api = apiInterface.getUpcomingMovie(API_KEY, "en-US")
-        api.enqueue(object : Callback<APIResponse> {
-            override fun onResponse(call: Call<APIResponse>, response: Response<APIResponse>) {
+        api.enqueue(object : Callback<MovieResponse> {
+            override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 val result = response.body()?.results
                 upcomingMovies.postValue(result)
             }
 
-            override fun onFailure(call: Call<APIResponse>, t: Throwable) {
+            override fun onFailure(call: Call<MovieResponse>, t: Throwable) {
                 Log.e("onFailure", t.message.toString())
             }
         })

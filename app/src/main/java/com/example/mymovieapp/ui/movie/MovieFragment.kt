@@ -2,17 +2,16 @@ package com.example.mymovieapp.ui.movie
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.mymovieapp.R
 import com.example.mymovieapp.adapter.MovieAdapter
 
@@ -27,7 +26,7 @@ class MovieFragment : Fragment() {
 
     private lateinit var progressBar: ProgressBar
 
-    private lateinit var clMovies:ConstraintLayout
+    private lateinit var clMovies: ConstraintLayout
 
     private lateinit var rvNowPlaying: RecyclerView
     private lateinit var rvPopular: RecyclerView
