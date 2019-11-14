@@ -1,6 +1,7 @@
 package com.example.mymovieapp
 
 import android.content.ContentValues
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -26,6 +27,7 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
         const val EXTRA_TV_ID = "extra_movie_id"
         const val EXTRA_FAVORITE_MOVIE = "extra_favorite_movie"
         const val EXTRA_FAVORITE_TV = "extra_favorite_tv"
+        const val EXTRA_IS_FAVORITE = "extra_is_favorite"
     }
 
     private lateinit var favMovieHelper: FavMovieHelper
@@ -42,7 +44,11 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
     private var favoriteMovie: FavoriteMovie? = null
     private var favoriteTv: FavoriteTv? = null
 
-    private var isMovie = true
+    private var isFavorite = false
+    private var isMovie = false
+
+    private val addFavText = "Add to Favorite"
+    private val removeFavText = "Remove from Favorite"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,28 +72,31 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
         tvId = intent.getIntExtra(EXTRA_TV_ID, 0)
         favoriteMovie = intent.getParcelableExtra(EXTRA_FAVORITE_MOVIE)
         favoriteTv = intent.getParcelableExtra(EXTRA_FAVORITE_TV)
+        isFavorite = intent.getBooleanExtra(EXTRA_IS_FAVORITE, false)
 
         val supActionBarTitle: String
 
         if (movieId != 0) {
 
-            if (movieId == favoriteMovie?.movieId) {
-                btn_add_favorite.isEnabled = false
-                btn_add_favorite.isClickable = false
+            if (isFavorite) {
+                btn_add_favorite.text = removeFavText
                 favoriteMovie?.let { setDetailsMovie(it.movieId) }
             } else {
                 setDetailsMovie(movieId)
             }
+
+            isMovie = true
 
             supActionBarTitle = getString(R.string.details_movie)
 
             getDetailsMovie()
 
         } else {
-            if (tvId == favoriteTv?.tvId) {
-                btn_add_favorite.isEnabled = false
-                btn_add_favorite.isClickable = false
+            if (isFavorite) {
+                btn_add_favorite.text = removeFavText
                 favoriteTv?.let { setDetailsTv(it.tvId) }
+
+                isFavorite = true
             } else {
                 setDetailsTv(tvId)
             }
@@ -95,8 +104,6 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
             getDetailsTv()
 
             supActionBarTitle = getString(R.string.details_tv)
-
-            isMovie = false
         }
 
         supportActionBar?.title = supActionBarTitle
@@ -133,32 +140,41 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
             values.put(ITEM_ID, itemId)
             values.put(POSTER_PATH, itemPoster)
 
-            if (isMovie) {
-                favMovieHelper.insert(values)
+            if (isFavorite) {
+
+                if (isMovie) {
+                    favMovieHelper.deleteById(favoriteMovie?.id.toString())
+                } else {
+                    favTvHelper.deleteById(favoriteTv?.id.toString())
+                }
+
+                Toast.makeText(
+                    this@DetailFilmActivity,
+                    "dihapus dari favorit",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                intent.putExtra(EXTRA_IS_FAVORITE, false)
+
             } else {
-                favTvHelper.insert(values)
+
+                if (isMovie) {
+                    favMovieHelper.insert(values)
+                } else {
+                    favTvHelper.insert(values)
+                }
+
+                Toast.makeText(
+                    this@DetailFilmActivity,
+                    "difavoritkan",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                intent.putExtra(EXTRA_IS_FAVORITE, true)
             }
 
-            Toast.makeText(
-                this@DetailFilmActivity,
-                "difavoritkan",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            btn_add_favorite.isEnabled = false
-
-
-//            if (result > 0) {
-//                favoriteMovie?.id = result.toInt()
-//                setResult(RESULT_ADD, intent)
-//                finish()
-//            } else {
-//                Toast.makeText(
-//                    this@DetailFilmActivity,
-//                    "Gagal menambahakan data favorit",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
+            finish()
+            startActivity(intent)
         }
     }
 
@@ -269,5 +285,4 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
             progressBar.visibility = View.GONE
         }
     }
-
 }

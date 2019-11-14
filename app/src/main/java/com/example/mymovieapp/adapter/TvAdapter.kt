@@ -57,10 +57,12 @@ class TvAdapter :
 
                     val cursor = favTvHelper.queryByMovieId(tvShows.id.toString())
                     val favoriteTv = MappingHelper.getTv(cursor)
+                    val isFavorite = favoriteTv.tvId==tvShows.id
 
                     val intent = Intent(context, DetailFilmActivity::class.java)
                     intent.putExtra(DetailFilmActivity.EXTRA_TV_ID, tvShows.id)
                     intent.putExtra(DetailFilmActivity.EXTRA_FAVORITE_TV, favoriteTv)
+                    intent.putExtra(DetailFilmActivity.EXTRA_IS_FAVORITE, isFavorite)
 
                     context.startActivity(intent)
 

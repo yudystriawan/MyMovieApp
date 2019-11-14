@@ -58,10 +58,12 @@ class MovieAdapter :
 
                     val cursor = favMovieHelper.queryByMovieId(movie.id.toString())
                     val favoriteMovie = MappingHelper.getMovie(cursor)
+                    val isFavorite = favoriteMovie.movieId==movie.id
 
                     val intent = Intent(context, DetailFilmActivity::class.java)
                     intent.putExtra(DetailFilmActivity.EXTRA_MOVIE_ID, movie.id)
                     intent.putExtra(DetailFilmActivity.EXTRA_FAVORITE_MOVIE, favoriteMovie)
+                    intent.putExtra(DetailFilmActivity.EXTRA_IS_FAVORITE, isFavorite)
 
                     context.startActivity(intent)
 
