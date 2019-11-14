@@ -13,6 +13,7 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.adapter.FavMovieAdapter
 import com.example.mymovieapp.database.FavMovieHelper
 import com.example.mymovieapp.helper.MappingHelper
+import com.example.mymovieapp.model.FavoriteMovie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -22,6 +23,10 @@ import kotlinx.coroutines.launch
  * A simple [Fragment] subclass.
  */
 class FavMovieFragment : Fragment() {
+
+    companion object {
+        private const val EXTRA_STATE = "EXTRA_STATE"
+    }
 
     private lateinit var adapter: FavMovieAdapter
     private lateinit var recyclerView: RecyclerView
@@ -42,7 +47,14 @@ class FavMovieFragment : Fragment() {
 
         favMovieHelper = FavMovieHelper.getInstance(activity!!.applicationContext)
 
-        loadMovieAsync()
+        if (savedInstanceState == null) {
+            loadMovieAsync()
+        } else {
+            val list = savedInstanceState.getParcelableArrayList<FavoriteMovie>(EXTRA_STATE)
+            if (list != null) {
+                adapter.listFavorites = list
+            }
+        }
 
         return view
     }
@@ -64,6 +76,11 @@ class FavMovieFragment : Fragment() {
                 Toast.makeText(context, "tidak ada data", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(EXTRA_STATE, adapter.listFavorites)
     }
 
 }

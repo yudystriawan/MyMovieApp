@@ -15,7 +15,6 @@ class MovieViewModel : ViewModel() {
     companion object {
         private const val API_KEY = "d8f112a69e3918d618e1be1a274830eb"
     }
-
     private val apiInterface = ServiceGenerator.getClient().create(APIInterface::class.java)
 
     private val nowPlayingMovies = MutableLiveData<ArrayList<Movie>>()
@@ -24,8 +23,8 @@ class MovieViewModel : ViewModel() {
     private val upcomingMovies = MutableLiveData<ArrayList<Movie>>()
     private val detailsMovie = MutableLiveData<Movie>()
 
-    fun setNowPlayingMovies() {
-        val api = apiInterface.getNowPlayingMovie(API_KEY, "en-US")
+    fun setNowPlayingMovies(language: String) {
+        val api = apiInterface.getNowPlayingMovie(API_KEY, language)
         api.enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 val result = response.body()?.results
@@ -38,8 +37,8 @@ class MovieViewModel : ViewModel() {
         })
     }
 
-    fun setPopularMovies() {
-        val api = apiInterface.getPopularMovie(API_KEY, "en-US")
+    fun setPopularMovies(language: String) {
+        val api = apiInterface.getPopularMovie(API_KEY, language)
         api.enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 val result = response.body()?.results
@@ -52,8 +51,8 @@ class MovieViewModel : ViewModel() {
         })
     }
 
-    fun setTopRatedMovies() {
-        val api = apiInterface.getTopRatedMovie(API_KEY, "en-US")
+    fun setTopRatedMovies(language: String) {
+        val api = apiInterface.getTopRatedMovie(API_KEY, language)
         api.enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 val result = response.body()?.results
@@ -66,8 +65,8 @@ class MovieViewModel : ViewModel() {
         })
     }
 
-    fun setUpcomingMovies() {
-        val api = apiInterface.getUpcomingMovie(API_KEY, "en-US")
+    fun setUpcomingMovies(language: String) {
+        val api = apiInterface.getUpcomingMovie(API_KEY, language)
         api.enqueue(object : Callback<MovieResponse> {
             override fun onResponse(call: Call<MovieResponse>, response: Response<MovieResponse>) {
                 val result = response.body()?.results
@@ -80,8 +79,8 @@ class MovieViewModel : ViewModel() {
         })
     }
 
-    fun setDetailsMovie(movieId: Int) {
-        val api = apiInterface.getDetailsMovie(movieId, API_KEY, "en-Us")
+    fun setDetailsMovie(movieId: Int, language: String) {
+        val api = apiInterface.getDetailsMovie(movieId, API_KEY, language)
         api.enqueue(object : Callback<Movie> {
             override fun onResponse(call: Call<Movie>, response: Response<Movie>) {
                 val result = response.body()

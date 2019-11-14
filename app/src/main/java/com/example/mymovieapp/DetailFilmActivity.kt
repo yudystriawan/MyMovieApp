@@ -67,6 +67,8 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
         favoriteMovie = intent.getParcelableExtra(EXTRA_FAVORITE_MOVIE)
         favoriteTv = intent.getParcelableExtra(EXTRA_FAVORITE_TV)
 
+        val supActionBarTitle: String
+
         if (movieId != 0) {
 
             if (movieId == favoriteMovie?.movieId) {
@@ -76,6 +78,8 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
             } else {
                 setDetailsMovie(movieId)
             }
+
+            supActionBarTitle = getString(R.string.details_movie)
 
             getDetailsMovie()
 
@@ -90,8 +94,12 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
 
             getDetailsTv()
 
+            supActionBarTitle = getString(R.string.details_tv)
+
             isMovie = false
         }
+
+        supportActionBar?.title = supActionBarTitle
 
         btn_add_favorite.setOnClickListener(this)
 
@@ -155,12 +163,16 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setDetailsMovie(movieId: Int) {
-        movieViewModel.setDetailsMovie(movieId)
+        val language = getString(R.string.language)
+
+        movieViewModel.setDetailsMovie(movieId, language)
         showLoading(true)
     }
 
     private fun setDetailsTv(tvId: Int) {
-        tvViewModel.setDetailsTv(tvId)
+        val language = getString(R.string.language)
+
+        tvViewModel.setDetailsTv(tvId, language)
         showLoading(true)
     }
 

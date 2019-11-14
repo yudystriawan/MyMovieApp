@@ -13,6 +13,7 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.adapter.FavTvAdapter
 import com.example.mymovieapp.database.FavTvHelper
 import com.example.mymovieapp.helper.MappingHelper
+import com.example.mymovieapp.model.FavoriteTv
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -22,6 +23,10 @@ import kotlinx.coroutines.launch
  * A simple [Fragment] subclass.
  */
 class FavTvFragment : Fragment() {
+
+    companion object {
+        private const val EXTRA_STATE = "EXTRA_STATE"
+    }
 
     private lateinit var adapter: FavTvAdapter
     private lateinit var recyclerView: RecyclerView
@@ -42,12 +47,19 @@ class FavTvFragment : Fragment() {
 
         helper = FavTvHelper.getInstance(activity!!.applicationContext)
 
-        loadMovieAsync()
+        if (savedInstanceState == null) {
+            loadTvAsync()
+        } else {
+            val list = savedInstanceState.getParcelableArrayList<FavoriteTv>(EXTRA_STATE)
+            if (list != null) {
+                adapter.listFavorites = list
+            }
+        }
 
         return view
     }
 
-    private fun loadMovieAsync() {
+    private fun loadTvAsync() {
         GlobalScope.launch(Dispatchers.Main) {
             val deferredMovies = async(Dispatchers.IO) {
                 val cursor = helper.queryAll()
@@ -64,6 +76,11 @@ class FavTvFragment : Fragment() {
                 Toast.makeText(context, "tidak ada data", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(EXTRA_STATE, adapter.listFavorites)
     }
 
 

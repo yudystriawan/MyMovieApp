@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyMovieApp</string>
+    <string name="airing_today">Mengudara</string>
+    <string name="favorites">Favorit</string>
+    <string name="language">en_US</string>
+    <string name="latest">Terbaru</string>
+    <string name="menu_profile">Profil Saya</string>
+    <string name="menu_setting">Pengaturan (Bahasa)</string>
+    <string name="my_email">yudistriawan@gmail.com</string>
+    <string name="my_favorite">Favorit Saya</string>
+    <string name="my_name">Ade Yudys Triawan</string>
+    <string name="now_playing">Sedang Tayang</string>
+    <string name="on_the_air">Sedang Disiarkan</string>
+    <string name="popular">Populer</string>
+    <string name="tab_text_1">Film</string>
+    <string name="tab_text_2">Acara TV</string>
+    <string name="top_rated">Peringkat Teratas</string>
+    <string name="upcoming">Akan datang</string>
+    <string name="menu_home">Beranda</string>
+    <string name="details_movie">Rincian Film</string>
+    <string name="details_tv">Rincian Acara TV</string>
+</resources>

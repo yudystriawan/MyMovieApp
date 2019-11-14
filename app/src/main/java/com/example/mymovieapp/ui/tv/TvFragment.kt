@@ -67,10 +67,12 @@ class TvFragment : Fragment() {
     }
 
     private fun setDataTvs() {
-        viewModel.setAiringToday()
-        viewModel.setOnTheAir()
-        viewModel.setPopularTv()
-        viewModel.setTopRatedTv()
+        val language = getString(R.string.language)
+
+        viewModel.setAiringToday(language)
+        viewModel.setOnTheAir(language)
+        viewModel.setPopularTv(language)
+        viewModel.setTopRatedTv(language)
         showLoading(true)
     }
 

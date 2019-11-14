@@ -113,10 +113,12 @@ class MovieFragment : Fragment() {
     }
 
     private fun setDataMovies() {
-        viewModel.setNowPlayingMovies()
-        viewModel.setPopularMovies()
-        viewModel.setTopRatedMovies()
-        viewModel.setUpcomingMovies()
+        val language = getString(R.string.language)
+
+        viewModel.setNowPlayingMovies(language)
+        viewModel.setPopularMovies(language)
+        viewModel.setTopRatedMovies(language)
+        viewModel.setUpcomingMovies(language)
         showLoading(true)
 
     }

@@ -25,8 +25,8 @@ class TvViewModel : ViewModel() {
     private val topRatedTvs = MutableLiveData<ArrayList<Tv>>()
     private val detailsTv = MutableLiveData<Tv>()
 
-    fun setAiringToday() {
-        val api = apiInterface.getAiringToday(API_KEY, "en-US")
+    fun setAiringToday(language: String) {
+        val api = apiInterface.getAiringToday(API_KEY, language)
         api.enqueue(object : Callback<TvResponse> {
             override fun onResponse(call: Call<TvResponse>, response: Response<TvResponse>) {
                 val result = response.body()?.results
@@ -39,8 +39,8 @@ class TvViewModel : ViewModel() {
         })
     }
 
-    fun setOnTheAir() {
-        val api = apiInterface.getTvOnTheAir(API_KEY, "en-US")
+    fun setOnTheAir(language: String) {
+        val api = apiInterface.getTvOnTheAir(API_KEY, language)
         api.enqueue(object : Callback<TvResponse> {
             override fun onResponse(call: Call<TvResponse>, response: Response<TvResponse>) {
                 val result = response.body()?.results
@@ -53,8 +53,8 @@ class TvViewModel : ViewModel() {
         })
     }
 
-    fun setPopularTv() {
-        val api = apiInterface.getPopularTv(API_KEY, "en-US")
+    fun setPopularTv(language: String) {
+        val api = apiInterface.getPopularTv(API_KEY, language)
         api.enqueue(object : Callback<TvResponse> {
             override fun onResponse(call: Call<TvResponse>, response: Response<TvResponse>) {
                 val result = response.body()?.results
@@ -67,8 +67,8 @@ class TvViewModel : ViewModel() {
         })
     }
 
-    fun setTopRatedTv() {
-        val api = apiInterface.getTopRatedTv(API_KEY, "en-US")
+    fun setTopRatedTv(language: String) {
+        val api = apiInterface.getTopRatedTv(API_KEY, language)
         api.enqueue(object : Callback<TvResponse> {
             override fun onResponse(call: Call<TvResponse>, response: Response<TvResponse>) {
                 val result = response.body()?.results
@@ -81,8 +81,8 @@ class TvViewModel : ViewModel() {
         })
     }
 
-    fun setDetailsTv(tvId: Int) {
-        val api = apiInterface.getDetailsTv(tvId, API_KEY, "en-US")
+    fun setDetailsTv(tvId: Int, language: String) {
+        val api = apiInterface.getDetailsTv(tvId, API_KEY, language)
         api.enqueue(object : Callback<Tv> {
             override fun onResponse(call: Call<Tv>, response: Response<Tv>) {
                 val result = response.body()

@@ -10,11 +10,12 @@ class FavoriteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorite)
 
-        supportActionBar?.title = "My Favorite"
+        val title = getString(R.string.my_favorite)
+
+        supportActionBar?.title = title
 
         val pagerAdapter = FavoritePagerAdapter(this, supportFragmentManager)
         view_pager.adapter = pagerAdapter
         tabs.setupWithViewPager(view_pager)
-
     }
 }
