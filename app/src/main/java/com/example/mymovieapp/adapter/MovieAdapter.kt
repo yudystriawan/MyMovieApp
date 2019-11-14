@@ -11,7 +11,6 @@ import com.example.mymovieapp.R
 import com.example.mymovieapp.database.FavMovieHelper
 import com.example.mymovieapp.helper.MappingHelper
 import com.example.mymovieapp.model.Movie
-import com.example.mymovieapp.model.Tv
 import kotlinx.android.synthetic.main.items.view.*
 
 class MovieAdapter :
@@ -58,7 +57,7 @@ class MovieAdapter :
                 itemView.img_poster.setOnClickListener {
 
                     val cursor = favMovieHelper.queryByMovieId(movie.id.toString())
-                    val favoriteMovie = MappingHelper.mapCursorToObject(cursor)
+                    val favoriteMovie = MappingHelper.getMovie(cursor)
 
                     val intent = Intent(context, DetailFilmActivity::class.java)
                     intent.putExtra(DetailFilmActivity.EXTRA_MOVIE_ID, movie.id)

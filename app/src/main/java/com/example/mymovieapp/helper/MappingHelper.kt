@@ -45,7 +45,7 @@ object MappingHelper {
         return tvShows
     }
 
-    fun mapCursorToObject(cursor: Cursor): FavoriteMovie {
+    fun getMovie(cursor: Cursor): FavoriteMovie {
 
         var favoriteMovie = FavoriteMovie()
 
