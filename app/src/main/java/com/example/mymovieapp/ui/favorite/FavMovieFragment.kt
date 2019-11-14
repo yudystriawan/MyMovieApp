@@ -60,6 +60,9 @@ class FavMovieFragment : Fragment() {
     }
 
     private fun loadMovieAsync() {
+
+        val message = getString(R.string.no_data)
+
         GlobalScope.launch(Dispatchers.Main) {
             val deferredMovies = async(Dispatchers.IO) {
                 val cursor = favMovieHelper.queryAll()
@@ -73,7 +76,7 @@ class FavMovieFragment : Fragment() {
             } else {
                 adapter.listFavorites = ArrayList()
 //                adapter.setData(movies)
-                Toast.makeText(context, "tidak ada data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
         }
     }

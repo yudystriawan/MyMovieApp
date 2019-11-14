@@ -20,4 +20,7 @@
     <string name="menu_home">Beranda</string>
     <string name="details_movie">Rincian Film</string>
     <string name="details_tv">Rincian Acara TV</string>
+    <string name="no_data">Tidak ada data</string>
+    <string name="message_add_favorite">Tambah ke Favorit</string>
+    <string name="message_remove_favorite">Hapus dari Favorit</string>
 </resources>

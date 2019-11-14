@@ -1,7 +1,6 @@
 package com.example.mymovieapp
 
 import android.content.ContentValues
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -47,10 +46,6 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
     private var isFavorite = false
     private var isMovie = false
 
-    private val addFavText = "Add to Favorite"
-    private val removeFavText = "Remove from Favorite"
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail_film)
@@ -76,12 +71,17 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
 
         val supActionBarTitle: String
 
+        val messageAdd = getString(R.string.message_add_favorite)
+        val messageRemove = getString(R.string.message_remove_favorite)
+
+
         if (movieId != 0) {
 
             if (isFavorite) {
-                btn_add_favorite.text = removeFavText
+                btn_add_favorite.text = messageRemove
                 favoriteMovie?.let { setDetailsMovie(it.movieId) }
             } else {
+                btn_add_favorite.text = messageAdd
                 setDetailsMovie(movieId)
             }
 
@@ -93,11 +93,12 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
 
         } else {
             if (isFavorite) {
-                btn_add_favorite.text = removeFavText
+                btn_add_favorite.text = messageRemove
                 favoriteTv?.let { setDetailsTv(it.tvId) }
 
                 isFavorite = true
             } else {
+                btn_add_favorite.text = messageAdd
                 setDetailsTv(tvId)
             }
 
@@ -119,26 +120,29 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
             val itemPoster: String?
             val values = ContentValues()
 
-            val ITEM_ID: String
-            val POSTER_PATH: String
+            val columnId: String
+            val columnPoster: String
+
+            val messageAdd = getString(R.string.message_add_favorite)
+            val messageRemove = getString(R.string.message_remove_favorite)
 
             if (isMovie) {
                 itemId = movie.id
                 itemPoster = movie.posterPath
 
-                ITEM_ID = DatabaseContract.FavMovieColumns.MOVIE_ID
-                POSTER_PATH = DatabaseContract.FavMovieColumns.POSTER_PATH
+                columnId = DatabaseContract.FavMovieColumns.MOVIE_ID
+                columnPoster = DatabaseContract.FavMovieColumns.POSTER_PATH
 
             } else {
                 itemId = tv.id
                 itemPoster = tv.posterPath
 
-                ITEM_ID = DatabaseContract.FavTvColumns.TV_ID
-                POSTER_PATH = DatabaseContract.FavTvColumns.POSTER_PATH
+                columnId = DatabaseContract.FavTvColumns.TV_ID
+                columnPoster = DatabaseContract.FavTvColumns.POSTER_PATH
             }
 
-            values.put(ITEM_ID, itemId)
-            values.put(POSTER_PATH, itemPoster)
+            values.put(columnId, itemId)
+            values.put(columnPoster, itemPoster)
 
             if (isFavorite) {
 
@@ -148,11 +152,7 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
                     favTvHelper.deleteById(favoriteTv?.id.toString())
                 }
 
-                Toast.makeText(
-                    this@DetailFilmActivity,
-                    "dihapus dari favorit",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToastMessage(messageRemove)
 
                 intent.putExtra(EXTRA_IS_FAVORITE, false)
 
@@ -164,11 +164,7 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
                     favTvHelper.insert(values)
                 }
 
-                Toast.makeText(
-                    this@DetailFilmActivity,
-                    "difavoritkan",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToastMessage(messageAdd)
 
                 intent.putExtra(EXTRA_IS_FAVORITE, true)
             }
@@ -176,6 +172,10 @@ class DetailFilmActivity : AppCompatActivity(), View.OnClickListener {
             finish()
             startActivity(intent)
         }
+    }
+
+    private fun showToastMessage(message: String) {
+        Toast.makeText(this@DetailFilmActivity, message, Toast.LENGTH_SHORT).show()
     }
 
     private fun setDetailsMovie(movieId: Int) {

@@ -60,6 +60,9 @@ class FavTvFragment : Fragment() {
     }
 
     private fun loadTvAsync() {
+
+        val message = getString(R.string.no_data)
+
         GlobalScope.launch(Dispatchers.Main) {
             val deferredMovies = async(Dispatchers.IO) {
                 val cursor = helper.queryAll()
@@ -69,11 +72,9 @@ class FavTvFragment : Fragment() {
             val tvShows = deferredMovies.await()
             if (tvShows.size > 0) {
                 adapter.listFavorites = tvShows
-//                adapter.setData(movies)
             } else {
                 adapter.listFavorites = ArrayList()
-//                adapter.setData(movies)
-                Toast.makeText(context, "tidak ada data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
         }
     }
