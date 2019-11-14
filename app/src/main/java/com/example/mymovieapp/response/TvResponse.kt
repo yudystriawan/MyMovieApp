@@ -1,6 +1,5 @@
 package com.example.mymovieapp.response
 
-import com.example.mymovieapp.model.Movie
 import com.example.mymovieapp.model.Tv
 import com.google.gson.annotations.SerializedName
 

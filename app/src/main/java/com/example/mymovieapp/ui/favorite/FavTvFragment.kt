@@ -2,14 +2,13 @@ package com.example.mymovieapp.ui.favorite
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.example.mymovieapp.R
 import com.example.mymovieapp.adapter.FavTvAdapter
 import com.example.mymovieapp.database.FavTvHelper

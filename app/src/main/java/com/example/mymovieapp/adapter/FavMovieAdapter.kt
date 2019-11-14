@@ -1,15 +1,12 @@
 package com.example.mymovieapp.adapter
 
-import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.mymovieapp.R
 import com.example.mymovieapp.model.FavoriteMovie
-import com.example.mymovieapp.model.Movie
 import kotlinx.android.synthetic.main.items.view.*
 
 class FavMovieAdapter() :

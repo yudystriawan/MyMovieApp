@@ -1,7 +1,7 @@
 package com.example.mymovieapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_favorite.*
 
 class FavoriteActivity : AppCompatActivity() {

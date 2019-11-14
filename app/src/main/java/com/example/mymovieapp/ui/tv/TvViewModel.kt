@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mymovieapp.APIInterface
 import com.example.mymovieapp.model.Tv
-import com.example.mymovieapp.response.MovieResponse
 import com.example.mymovieapp.response.TvResponse
 import com.example.mymovieapp.services.ServiceGenerator
 import retrofit2.Call

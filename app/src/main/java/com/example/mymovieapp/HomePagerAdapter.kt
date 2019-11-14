@@ -6,7 +6,6 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.example.mymovieapp.ui.home.HomeFragment
 import com.example.mymovieapp.ui.movie.MovieFragment
 import com.example.mymovieapp.ui.tv.TvFragment
 

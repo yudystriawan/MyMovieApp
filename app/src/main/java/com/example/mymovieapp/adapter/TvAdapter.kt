@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mymovieapp.DetailFilmActivity
 import com.example.mymovieapp.R
-import com.example.mymovieapp.database.FavMovieHelper
 import com.example.mymovieapp.database.FavTvHelper
 import com.example.mymovieapp.helper.MappingHelper
-import com.example.mymovieapp.model.FavoriteTv
 import com.example.mymovieapp.model.Tv
 import kotlinx.android.synthetic.main.items.view.*
 
